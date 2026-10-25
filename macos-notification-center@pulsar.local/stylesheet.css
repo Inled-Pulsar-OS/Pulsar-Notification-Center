@@ -102,15 +102,15 @@
 .mac-nc-card {
     border-radius: 32.5px;
     padding: 12px;
-    background-color: rgba(255, 255, 255, 0.08) !important;
-    border: 1px solid rgba(255, 255, 255, 0.18) !important;
-    box-shadow: none !important;
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.24) !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18) !important;
     color: #ffffff !important;
 }
 
 .mac-nc-card:hover {
-    background-color: rgba(255, 255, 255, 0.14) !important;
-    border-color: rgba(255, 255, 255, 0.26) !important;
+    background-color: rgba(255, 255, 255, 0.22) !important;
+    border-color: rgba(255, 255, 255, 0.32) !important;
 }
 
 .mac-nc-card-inner {
@@ -162,8 +162,9 @@
 .mac-nc-notif-card {
     padding: 10px 12px;
     border-radius: 22px;
-    background-color: rgba(30, 30, 40, 0.66) !important;
-    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    background-color: rgba(30, 30, 42, 0.72) !important;
+    border: 1px solid rgba(255, 255, 255, 0.20) !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18) !important;
     width: 350px;
 }
 
