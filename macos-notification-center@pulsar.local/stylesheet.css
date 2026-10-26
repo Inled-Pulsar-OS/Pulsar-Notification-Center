@@ -23,8 +23,8 @@
 /* 2. Main Root Container */
 .mac-nc-sidebar {
     padding: 8px 6px;
-    width: 366px;
-    max-width: 366px;
+    width: 370px;
+    max-width: 370px;
     background-color: transparent !important;
     background: transparent !important;
     border: none !important;
@@ -33,6 +33,22 @@
 
 .mac-nc-scroll {
     max-height: 900px;
+    padding-right: 4px;
+}
+
+.mac-nc-scroll StScrollBar {
+    padding: 0px;
+}
+
+.mac-nc-scroll StScrollBar StButton#vhandle {
+    background-color: rgba(255, 255, 255, 0.25);
+    border-radius: 4px;
+    margin: 1px;
+}
+
+.mac-nc-scroll StScrollBar StButton#vhandle:hover,
+.mac-nc-scroll StScrollBar StButton#vhandle:active {
+    background-color: rgba(255, 255, 255, 0.45);
 }
 
 .mac-nc-content {
