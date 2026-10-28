@@ -471,13 +471,7 @@ class MacOSNotificationCenter {
             this._ids.push([this._dateMenu.menu, this._dateMenu.menu.connect('open-state-changed', (_m, open) => {
                 if (open) {
                     this._applyTransparentContainer(true);
-                    try {
-                        const monitor = Main.layoutManager.primaryMonitor;
-                        if (monitor && this._scroll) {
-                            const maxH = Math.max(400, monitor.height - Main.panel.height - 30);
-                            this._scroll.set_style(`max-height: ${maxH}px;`);
-                        }
-                    } catch (e) {}
+                    this._applyResponsiveScale();
                     if (this._dateMenu?.menu?._boxPointer?._border) {
                         this._dateMenu.menu._boxPointer._border.visible = false;
                         this._dateMenu.menu._boxPointer._border.opacity = 0;
@@ -496,6 +490,10 @@ class MacOSNotificationCenter {
                     } catch (e) {}
                 }
             })]);
+        }
+
+        if (Main.layoutManager) {
+            this._ids.push([Main.layoutManager, Main.layoutManager.connect('monitors-changed', () => this._applyResponsiveScale())]);
         }
 
         this._subs = [
@@ -627,6 +625,39 @@ class MacOSNotificationCenter {
                     menu._boxPointer._border.opacity = 255;
                 }
             }
+        }
+    }
+
+    _applyResponsiveScale() {
+        if (!this._root) return;
+        try {
+            const monitor = Main.layoutManager.primaryMonitor;
+            if (!monitor) return;
+            const panelHeight = Main.panel?.height || 32;
+            const availableHeight = monitor.height - panelHeight - 60;
+
+            let scale = 0.85;
+            if (monitor.height <= 768) {
+                scale = 0.70;
+            } else if (monitor.height <= 900) {
+                scale = 0.75;
+            } else if (monitor.height <= 1000) {
+                scale = 0.80;
+            } else if (monitor.height <= 1100) {
+                scale = 0.84;
+            } else {
+                scale = 0.90;
+            }
+
+            this._root.set_pivot_point(1.0, 0.0);
+            this._root.set_scale(scale, scale);
+
+            if (this._scroll) {
+                const maxH = Math.max(300, Math.round(availableHeight / scale));
+                this._scroll.set_style(`max-height: ${maxH}px;`);
+            }
+        } catch (e) {
+            console.warn(`macos-nc: responsive scale error: ${e}`);
         }
     }
 
@@ -1181,6 +1212,7 @@ class MacOSNotificationCenter {
         content.add_child(widgetsBox);
         scroll.set_child(content);
         this._root.add_child(scroll);
+        this._applyResponsiveScale();
     }
 
     /* 1. Notifications UI */
@@ -1566,6 +1598,7 @@ class MacOSNotificationCenter {
             style_class: 'mac-nc-reminders-status',
         });
         statusLabel.clutter_text.ellipsize = Pango.EllipsizeMode.END;
+        statusLabel.clutter_text.line_wrap = false;
         row.add_child(statusLabel);
         list.add_child(row);
 
@@ -1574,6 +1607,7 @@ class MacOSNotificationCenter {
             style_class: 'mac-nc-reminders-sub',
         });
         subLabel.clutter_text.ellipsize = Pango.EllipsizeMode.END;
+        subLabel.clutter_text.line_wrap = false;
         list.add_child(subLabel);
         card.add_child(list);
         return card;
@@ -1785,6 +1819,8 @@ class MacOSNotificationCenter {
                 y_align: Clutter.ActorAlign.CENTER,
             });
             devLabel.clutter_text.ellipsize = Pango.EllipsizeMode.END;
+            devLabel.clutter_text.line_wrap = false;
+            devLabel.set_style('max-width: 65px;');
             row.add_child(devLabel);
             const levelLabel = new St.Label({
                 text: '100%',
@@ -1792,6 +1828,7 @@ class MacOSNotificationCenter {
                 x_align: Clutter.ActorAlign.END,
                 y_align: Clutter.ActorAlign.CENTER,
             });
+            levelLabel.set_style('min-width: 38px; text-align: right;');
             row.add_child(levelLabel);
             this._batteryList.add_child(row);
             return;
@@ -1812,6 +1849,8 @@ class MacOSNotificationCenter {
                 y_align: Clutter.ActorAlign.CENTER,
             });
             devLabel.clutter_text.ellipsize = Pango.EllipsizeMode.END;
+            devLabel.clutter_text.line_wrap = false;
+            devLabel.set_style('max-width: 65px;');
             row.add_child(devLabel);
             const levelLabel = new St.Label({
                 text: `${dev.percentage}%`,
@@ -1819,6 +1858,7 @@ class MacOSNotificationCenter {
                 x_align: Clutter.ActorAlign.END,
                 y_align: Clutter.ActorAlign.CENTER,
             });
+            levelLabel.set_style('min-width: 38px; text-align: right;');
             row.add_child(levelLabel);
             this._batteryList.add_child(row);
         }
