@@ -404,7 +404,7 @@ class MacOSNotificationCenter {
         this._dateMenu = Main.panel.statusArea.dateMenu;
         this._ids = [];
         this._subs = [];
-        this._hiddenChildren = [];
+        this._removed = [];
         this._cards = [];
         this._pollId = 0;
         this._weatherPollId = 0;
@@ -448,13 +448,15 @@ class MacOSNotificationCenter {
         this._pan = null;
         this._loadPannelli();
 
+        this._removed = [];
         if (this._dateMenu?.menu?.box) {
             const box = this._dateMenu.menu.box;
-            box.get_children().forEach(child => {
-                if (child !== this._root && child.visible) {
-                    child.visible = false;
-                    this._hiddenChildren.push(child);
-                }
+            const kids = box.get_children();
+            kids.forEach((child, i) => {
+                if (child === this._root)
+                    return;
+                this._removed.push([child, i]);
+                box.remove_child(child);
             });
             box.add_child(this._root);
         }
@@ -469,6 +471,10 @@ class MacOSNotificationCenter {
             this._ids.push([this._dateMenu.menu, this._dateMenu.menu.connect('open-state-changed', (_m, open) => {
                 if (open) {
                     this._applyTransparentContainer(true);
+                    if (this._dateMenu?.menu?._boxPointer?._border) {
+                        this._dateMenu.menu._boxPointer._border.visible = false;
+                        this._dateMenu.menu._boxPointer._border.opacity = 0;
+                    }
                     this._queryTodayEvents();
                     this._refresh();
                     this._updateLiquidGlass();
@@ -552,12 +558,12 @@ class MacOSNotificationCenter {
             this._root = null;
         }
 
-        for (const child of this._hiddenChildren ?? []) {
+        for (const [child, i] of this._removed ?? []) {
             try {
-                child.visible = true;
+                this._dateMenu?.menu?.box?.insert_child_at_index(child, i);
             } catch (e) {}
         }
-        this._hiddenChildren = [];
+        this._removed = [];
 
         this._dateMenu = null;
         this._calendarProxy = null;
@@ -573,13 +579,47 @@ class MacOSNotificationCenter {
         const menu = this._dateMenu?.menu;
         if (!menu) return;
         const cls = 'mac-nc-datemenu';
+        const transparentStyle = 'background: transparent !important; background-color: transparent !important; border: none !important; border-image: none !important; background-image: none !important; box-shadow: none !important; margin: 0 !important; padding: 0 !important;';
 
         for (const actor of [menu.actor, menu.box, menu._boxPointer, menu._boxPointer?.bin]) {
             if (!actor) continue;
-            if (enable)
+            if (enable) {
                 actor.add_style_class_name(cls);
-            else
+                try { actor.set_style(transparentStyle); } catch (e) {}
+            } else {
                 actor.remove_style_class_name(cls);
+                try { actor.set_style(null); } catch (e) {}
+            }
+        }
+
+        if (menu.box) {
+            if (enable) {
+                menu.box.remove_style_class_name('popup-menu-content');
+                menu.box.remove_style_class_name('datemenu-popover');
+            } else {
+                menu.box.add_style_class_name('popup-menu-content');
+                menu.box.add_style_class_name('datemenu-popover');
+            }
+        }
+
+        if (menu._boxPointer) {
+            if (enable) {
+                menu._boxPointer.remove_style_class_name('popup-menu-boxpointer');
+                menu._boxPointer.remove_style_class_name('popup-menu');
+                menu._boxPointer.remove_style_class_name('panel-menu');
+                if (menu._boxPointer._border) {
+                    menu._boxPointer._border.visible = false;
+                    menu._boxPointer._border.opacity = 0;
+                }
+            } else {
+                menu._boxPointer.add_style_class_name('popup-menu-boxpointer');
+                menu._boxPointer.add_style_class_name('popup-menu');
+                menu._boxPointer.add_style_class_name('panel-menu');
+                if (menu._boxPointer._border) {
+                    menu._boxPointer._border.visible = true;
+                    menu._boxPointer._border.opacity = 255;
+                }
+            }
         }
     }
 
@@ -1077,6 +1117,9 @@ class MacOSNotificationCenter {
             style_class: 'mac-nc-row',
             x_expand: true,
         });
+        if (row1.layout_manager && 'homogeneous' in row1.layout_manager) {
+            try { row1.layout_manager.homogeneous = true; } catch (e) {}
+        }
         this._calendarCard = this._buildCalendarCard();
         this._remindersCard = this._buildRemindersCard();
         this._cards.push(this._calendarCard, this._remindersCard);
@@ -1104,6 +1147,9 @@ class MacOSNotificationCenter {
             style_class: 'mac-nc-row',
             x_expand: true,
         });
+        if (row4.layout_manager && 'homogeneous' in row4.layout_manager) {
+            try { row4.layout_manager.homogeneous = true; } catch (e) {}
+        }
         this._musicCard = this._buildMusicCard();
         this._batteryCard = this._buildBatteryCard();
         this._cards.push(this._musicCard, this._batteryCard);
@@ -1312,7 +1358,7 @@ class MacOSNotificationCenter {
             style_class: 'mac-nc-card mac-nc-square mac-nc-calendar-card',
             can_focus: true,
             reactive: true,
-            x_expand: true,
+            x_expand: false,
         });
 
         const box = new St.BoxLayout({
@@ -1475,7 +1521,7 @@ class MacOSNotificationCenter {
             orientation: Clutter.Orientation.VERTICAL,
             style_class: 'mac-nc-card mac-nc-square mac-nc-reminders-card',
             reactive: true,
-            x_expand: true,
+            x_expand: false,
         });
 
         const header = new St.BoxLayout({
@@ -1507,16 +1553,20 @@ class MacOSNotificationCenter {
             style_class: 'mac-nc-card-header',
         });
         row.add_child(icon('emblem-ok-symbolic', 'mac-nc-check-icon', 14));
-        row.add_child(new St.Label({
+        const statusLabel = new St.Label({
             text: t('ALL_DONE'),
             style_class: 'mac-nc-reminders-status',
-        }));
+        });
+        statusLabel.clutter_text.ellipsize = Pango.EllipsizeMode.END;
+        row.add_child(statusLabel);
         list.add_child(row);
 
-        list.add_child(new St.Label({
+        const subLabel = new St.Label({
             text: t('NO_TASKS'),
             style_class: 'mac-nc-reminders-sub',
-        }));
+        });
+        subLabel.clutter_text.ellipsize = Pango.EllipsizeMode.END;
+        list.add_child(subLabel);
         card.add_child(list);
         return card;
     }
@@ -1997,7 +2047,7 @@ class MacOSNotificationCenter {
             orientation: Clutter.Orientation.VERTICAL,
             style_class: 'mac-nc-card mac-nc-square mac-nc-podcasts-card',
             reactive: true,
-            x_expand: true,
+            x_expand: false,
         });
 
         const header = new St.BoxLayout({
@@ -2445,7 +2495,7 @@ class MacOSNotificationCenter {
             orientation: Clutter.Orientation.VERTICAL,
             style_class: 'mac-nc-card mac-nc-square mac-nc-battery-card',
             reactive: true,
-            x_expand: true,
+            x_expand: false,
         });
 
         const header = new St.BoxLayout({

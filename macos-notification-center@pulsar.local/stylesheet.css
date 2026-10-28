@@ -1,11 +1,24 @@
 /* macOS Notification Center Sidebar for Pulsar OS - Liquid Glass UI */
 
-/* 1. Transparent popover container */
+/* 1. Transparent popover container (Zero enclosing dark background) */
 .mac-nc-datemenu,
+.mac-nc-datemenu.popup-menu-content,
 .mac-nc-datemenu .popup-menu-content,
+.popup-menu-content.mac-nc-datemenu,
 .popup-menu-boxpointer.mac-nc-datemenu,
 .datemenu-popover.mac-nc-datemenu,
-.datemenu-popover.mac-nc-datemenu .popup-menu-content {
+.datemenu-popover.mac-nc-datemenu.popup-menu-content,
+.datemenu-popover.mac-nc-datemenu .popup-menu-content,
+.bms-popup-background-dark .mac-nc-datemenu,
+.bms-popup-background-dark .mac-nc-datemenu.popup-menu-content,
+.bms-popup-background-dark .mac-nc-datemenu .popup-menu-content,
+.bms-popup-background-dark .popup-menu-boxpointer.mac-nc-datemenu,
+.bms-popup-background-dark .datemenu-popover.mac-nc-datemenu,
+.bms-popup-surface-dark .mac-nc-datemenu,
+.bms-popup-surface-dark .mac-nc-datemenu.popup-menu-content,
+.bms-popup-surface-dark .mac-nc-datemenu .popup-menu-content,
+.bms-popup-surface-dark .popup-menu-boxpointer.mac-nc-datemenu,
+.bms-popup-surface-dark .datemenu-popover.mac-nc-datemenu {
     -arrow-background-color: transparent !important;
     -arrow-border-color: transparent !important;
     -arrow-border-width: 0px !important;
@@ -14,6 +27,8 @@
     background-color: transparent !important;
     background: transparent !important;
     border: none !important;
+    border-image: none !important;
+    background-image: none !important;
     box-shadow: none !important;
     border-radius: 0px !important;
     padding: 0px !important;
@@ -22,8 +37,9 @@
 
 /* 2. Main Root Container */
 .mac-nc-sidebar {
-    padding: 8px 6px;
+    padding: 8px 10px;
     width: 370px;
+    min-width: 370px;
     max-width: 370px;
     background-color: transparent !important;
     background: transparent !important;
@@ -54,11 +70,15 @@
 .mac-nc-content {
     spacing: 12px;
     width: 350px;
+    min-width: 350px;
+    max-width: 350px;
 }
 
 .mac-nc-section {
     spacing: 8px;
     width: 350px;
+    min-width: 350px;
+    max-width: 350px;
 }
 
 .mac-nc-section-header,
@@ -89,11 +109,23 @@
 .mac-nc-widgets {
     spacing: 12px;
     width: 350px;
+    min-width: 350px;
+    max-width: 350px;
 }
 
 .mac-nc-row {
     spacing: 12px;
     width: 350px;
+    min-width: 350px;
+    max-width: 350px;
+}
+
+.mac-nc-row > * {
+    max-width: 169px;
+}
+
+.mac-nc-row > .mac-nc-square-open {
+    max-width: 350px;
 }
 
 /* 3. Base Floating Glass Cards
@@ -134,21 +166,9 @@
 }
 
 .mac-nc-square {
-    /* Width: measured, not guessed. The two widgets in a row used to size
-     * themselves on their own content (the calendar came out 192px wide, the
-     * tasks widget 162px), so the row looked ragged. Both cards expand, so
-     * giving them the same preferred width splits the row evenly:
-     * (366 - 12 gap) / 2 = 177. */
-    width: 177px;
-    /* 168px (was 154): a month grid can span six weeks (March, August and
-     * November 2026, for instance) and at 154px the last row plus the event
-     * line spilled outside the card.
-     *
-     * These are a size, not a floor: `height` is a floor on the natural height
-     * but `max-height` is a CAP on it (St takes the MIN of the two), so the
-     * closed pod measures 190px and may not grow a pixel more. That is what
-     * keeps the grid square — and it is also why a panel taller than a square
-     * could not fit until the class swap below was added. */
+    width: 169px;
+    min-width: 169px;
+    max-width: 169px;
     height: 168px;
     min-height: 168px;
     max-height: 168px;
@@ -156,6 +176,8 @@
 
 .mac-nc-wide {
     width: 350px;
+    min-width: 350px;
+    max-width: 350px;
 }
 
 /* While one of those pods is showing a panel it must be free to grow: St's
@@ -255,6 +277,8 @@
     background-color: rgba(30, 30, 40, 0.66) !important;
     border: 1px solid rgba(255, 255, 255, 0.14) !important;
     width: 350px;
+    min-width: 350px;
+    max-width: 350px;
 }
 
 .mac-nc-empty-icon {
@@ -657,6 +681,7 @@
     font-size: 10px;
     font-weight: 500;
     color: #ffffff;
+    max-width: 80px;
 }
 
 .mac-nc-device-level {
