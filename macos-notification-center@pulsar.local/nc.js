@@ -471,6 +471,13 @@ class MacOSNotificationCenter {
             this._ids.push([this._dateMenu.menu, this._dateMenu.menu.connect('open-state-changed', (_m, open) => {
                 if (open) {
                     this._applyTransparentContainer(true);
+                    try {
+                        const monitor = Main.layoutManager.primaryMonitor;
+                        if (monitor && this._scroll) {
+                            const maxH = Math.max(400, monitor.height - Main.panel.height - 30);
+                            this._scroll.set_style(`max-height: ${maxH}px;`);
+                        }
+                    } catch (e) {}
                     if (this._dateMenu?.menu?._boxPointer?._border) {
                         this._dateMenu.menu._boxPointer._border.visible = false;
                         this._dateMenu.menu._boxPointer._border.opacity = 0;
@@ -1033,6 +1040,7 @@ class MacOSNotificationCenter {
             x_expand: true,
             y_expand: true,
         });
+        this._scroll = scroll;
 
         const content = new St.BoxLayout({
             orientation: Clutter.Orientation.VERTICAL,
@@ -1763,21 +1771,55 @@ class MacOSNotificationCenter {
         this._batteryList.destroy_all_children();
 
         if (devices.length === 0) {
-            const row = new St.BoxLayout({orientation: Clutter.Orientation.HORIZONTAL, style_class: 'mac-nc-battery-row', x_expand: true});
+            const row = new St.BoxLayout({
+                orientation: Clutter.Orientation.HORIZONTAL,
+                style_class: 'mac-nc-battery-row',
+                x_expand: true,
+                y_align: Clutter.ActorAlign.CENTER,
+            });
             row.add_child(icon('ac-adapter-symbolic', 'mac-nc-device-icon', 14));
-            row.add_child(new St.Label({text: 'Alimentación CA', style_class: 'mac-nc-device-name', x_expand: true}));
-            row.add_child(new St.Label({text: '100%', style_class: 'mac-nc-device-level'}));
+            const devLabel = new St.Label({
+                text: 'Alimentación CA',
+                style_class: 'mac-nc-device-name',
+                x_expand: true,
+                y_align: Clutter.ActorAlign.CENTER,
+            });
+            devLabel.clutter_text.ellipsize = Pango.EllipsizeMode.END;
+            row.add_child(devLabel);
+            const levelLabel = new St.Label({
+                text: '100%',
+                style_class: 'mac-nc-device-level',
+                x_align: Clutter.ActorAlign.END,
+                y_align: Clutter.ActorAlign.CENTER,
+            });
+            row.add_child(levelLabel);
             this._batteryList.add_child(row);
             return;
         }
 
         for (const dev of devices) {
-            const row = new St.BoxLayout({orientation: Clutter.Orientation.HORIZONTAL, style_class: 'mac-nc-battery-row', x_expand: true});
+            const row = new St.BoxLayout({
+                orientation: Clutter.Orientation.HORIZONTAL,
+                style_class: 'mac-nc-battery-row',
+                x_expand: true,
+                y_align: Clutter.ActorAlign.CENTER,
+            });
             row.add_child(icon(dev.iconName, 'mac-nc-device-icon', 14));
-            const devLabel = new St.Label({text: dev.name, style_class: 'mac-nc-device-name', x_expand: true});
+            const devLabel = new St.Label({
+                text: dev.name,
+                style_class: 'mac-nc-device-name',
+                x_expand: true,
+                y_align: Clutter.ActorAlign.CENTER,
+            });
             devLabel.clutter_text.ellipsize = Pango.EllipsizeMode.END;
             row.add_child(devLabel);
-            row.add_child(new St.Label({text: `${dev.percentage}%`, style_class: 'mac-nc-device-level'}));
+            const levelLabel = new St.Label({
+                text: `${dev.percentage}%`,
+                style_class: 'mac-nc-device-level',
+                x_align: Clutter.ActorAlign.END,
+                y_align: Clutter.ActorAlign.CENTER,
+            });
+            row.add_child(levelLabel);
             this._batteryList.add_child(row);
         }
     }
