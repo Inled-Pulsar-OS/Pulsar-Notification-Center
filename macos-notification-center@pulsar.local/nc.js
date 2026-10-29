@@ -634,39 +634,29 @@ class MacOSNotificationCenter {
             const monitor = Main.layoutManager.primaryMonitor;
             if (!monitor) return;
             const panelHeight = Main.panel?.height || 32;
-            const availableHeight = monitor.height - panelHeight - 60;
+            const availableHeight = Math.max(400, monitor.height - panelHeight - 40);
 
-            let scale = 0.85;
-            if (monitor.height <= 768) {
-                scale = 0.70;
-            } else if (monitor.height <= 900) {
-                scale = 0.75;
-            } else if (monitor.height <= 1000) {
-                scale = 0.80;
-            } else if (monitor.height <= 1100) {
-                scale = 0.84;
-            } else {
-                scale = 0.90;
-            }
-
-            this._root.set_pivot_point(1.0, 0.0);
-            this._root.set_scale(scale, scale);
+            // Natural 1:1 scale on all screens to preserve sharpness and avoid miniature UI
+            this._root.set_scale(1.0, 1.0);
 
             if (this._scroll) {
-                const maxH = Math.max(300, Math.round(availableHeight / scale));
-                this._scroll.set_style(`max-height: ${maxH}px;`);
+                this._scroll.set_style(`max-height: ${availableHeight}px;`);
             }
         } catch (e) {
             console.warn(`macos-nc: responsive scale error: ${e}`);
         }
     }
 
-    _updateLiquidGlass() {
-        let lg = null;
+    _isLiquidGlassActive() {
         try {
-            lg = Main.extensionManager?.lookup?.(LG_UUID)?.stateObj ?? null;
-        } catch (e) {}
-        const active = !!lg;
+            return !!Main.extensionManager?.lookup?.(LG_UUID)?.stateObj;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    _updateLiquidGlass() {
+        const active = this._isLiquidGlassActive();
 
         for (const card of this._cards ?? []) {
             if (!card) continue;
@@ -674,6 +664,16 @@ class MacOSNotificationCenter {
                 card.add_style_class_name('quick-toggle');
             else
                 card.remove_style_class_name('quick-toggle');
+        }
+
+        if (this._notifList) {
+            for (const child of this._notifList.get_children()) {
+                if (!child) continue;
+                if (active)
+                    child.add_style_class_name('quick-toggle');
+                else
+                    child.remove_style_class_name('quick-toggle');
+            }
         }
     }
 
@@ -1249,6 +1249,8 @@ class MacOSNotificationCenter {
                 x_expand: true,
                 x_align: Clutter.ActorAlign.CENTER,
             });
+            if (this._isLiquidGlassActive())
+                emptyCard.add_style_class_name('quick-toggle');
             emptyCard.add_child(icon('nc:messages', 'mac-nc-empty-icon', 16));
             emptyCard.add_child(new St.Label({
                 text: t('NO_NOTIFICATIONS'),
@@ -1270,11 +1272,13 @@ class MacOSNotificationCenter {
         if (!this._notifsExpanded && total > 3) {
             const remaining = total - 3;
             const moreBtn = new St.Button({
-                style_class: 'mac-nc-more-notifs-btn',
+                style_class: 'mac-nc-card mac-nc-more-notifs-btn',
                 can_focus: true,
                 reactive: true,
                 x_expand: true,
             });
+            if (this._isLiquidGlassActive())
+                moreBtn.add_style_class_name('quick-toggle');
             const moreBox = new St.BoxLayout({
                 orientation: Clutter.Orientation.HORIZONTAL,
                 x_align: Clutter.ActorAlign.CENTER,
@@ -1300,6 +1304,8 @@ class MacOSNotificationCenter {
             reactive: true,
             x_expand: true,
         });
+        if (this._isLiquidGlassActive())
+            card.add_style_class_name('quick-toggle');
 
         const box = new St.BoxLayout({
             orientation: Clutter.Orientation.VERTICAL,
