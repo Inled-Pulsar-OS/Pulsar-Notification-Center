@@ -455,10 +455,17 @@ class MacOSNotificationCenter {
             kids.forEach((child, i) => {
                 if (child === this._root)
                     return;
+                let cname = '';
+                try { cname = (child.get_name && child.get_name()) || child.name || ''; } catch (e) {}
+                let cctor = '';
+                try { cctor = (child.constructor && child.constructor.name) || ''; } catch (e) {}
+                if (cname === 'liquid-glass-toggle-host' || cctor === 'LayoutOpaqueActor')
+                    return;
                 this._removed.push([child, i]);
                 box.remove_child(child);
             });
-            box.add_child(this._root);
+            if (this._root.get_parent() !== box)
+                box.add_child(this._root);
         }
 
         try {
@@ -626,6 +633,17 @@ class MacOSNotificationCenter {
                 }
             }
         }
+
+        try {
+            if (global.blur_my_shell?._popup) {
+                const pb = global.blur_my_shell._popup;
+                for (const actor of [menu.actor, menu.box, menu._boxPointer, menu._boxPointer?.bin, this._root, this._scroll, this._content]) {
+                    if (actor && pb.surfaces?.has(actor)) {
+                        pb.destroy_blur(actor);
+                    }
+                }
+            }
+        } catch (e) {}
     }
 
     _applyResponsiveScale() {
@@ -634,7 +652,8 @@ class MacOSNotificationCenter {
             const monitor = Main.layoutManager.primaryMonitor;
             if (!monitor) return;
             const panelHeight = Main.panel?.height || 32;
-            const availableHeight = Math.max(400, monitor.height - panelHeight - 40);
+            // Leave 90px safe area at the bottom so it never collides into the dock
+            const availableHeight = Math.max(350, monitor.height - panelHeight - 90);
 
             // Natural 1:1 scale on all screens to preserve sharpness and avoid miniature UI
             this._root.set_scale(1.0, 1.0);
@@ -649,7 +668,9 @@ class MacOSNotificationCenter {
 
     _isLiquidGlassActive() {
         try {
-            return !!Main.extensionManager?.lookup?.(LG_UUID)?.stateObj;
+            const ext = Main.extensionManager?.lookup?.(LG_UUID);
+            if (!ext) return false;
+            return ext.state === 1 || !!ext.stateObj;
         } catch (e) {
             return false;
         }
@@ -1156,9 +1177,6 @@ class MacOSNotificationCenter {
             style_class: 'mac-nc-row',
             x_expand: true,
         });
-        if (row1.layout_manager && 'homogeneous' in row1.layout_manager) {
-            try { row1.layout_manager.homogeneous = true; } catch (e) {}
-        }
         this._calendarCard = this._buildCalendarCard();
         this._remindersCard = this._buildRemindersCard();
         this._cards.push(this._calendarCard, this._remindersCard);
@@ -1186,9 +1204,6 @@ class MacOSNotificationCenter {
             style_class: 'mac-nc-row',
             x_expand: true,
         });
-        if (row4.layout_manager && 'homogeneous' in row4.layout_manager) {
-            try { row4.layout_manager.homogeneous = true; } catch (e) {}
-        }
         this._musicCard = this._buildMusicCard();
         this._batteryCard = this._buildBatteryCard();
         this._cards.push(this._musicCard, this._batteryCard);
@@ -1245,7 +1260,7 @@ class MacOSNotificationCenter {
             this._expandBtn.visible = false;
             const emptyCard = new St.BoxLayout({
                 orientation: Clutter.Orientation.HORIZONTAL,
-                style_class: 'mac-nc-card mac-nc-empty-card',
+                style_class: 'mac-nc-card mac-nc-empty-card quick-toggle',
                 x_expand: true,
                 x_align: Clutter.ActorAlign.CENTER,
             });
@@ -1272,7 +1287,7 @@ class MacOSNotificationCenter {
         if (!this._notifsExpanded && total > 3) {
             const remaining = total - 3;
             const moreBtn = new St.Button({
-                style_class: 'mac-nc-card mac-nc-more-notifs-btn',
+                style_class: 'mac-nc-card mac-nc-more-notifs-btn quick-toggle',
                 can_focus: true,
                 reactive: true,
                 x_expand: true,
@@ -1299,7 +1314,7 @@ class MacOSNotificationCenter {
 
     _buildNotificationCard(notification) {
         const card = new St.Button({
-            style_class: 'mac-nc-card mac-nc-notif-card',
+            style_class: 'mac-nc-card mac-nc-notif-card quick-toggle',
             can_focus: true,
             reactive: true,
             x_expand: true,
@@ -1401,7 +1416,7 @@ class MacOSNotificationCenter {
     /* 2. Calendar Widget (Real Interactive Month Grid) */
     _buildCalendarCard() {
         const card = new St.Button({
-            style_class: 'mac-nc-card mac-nc-square mac-nc-calendar-card',
+            style_class: 'mac-nc-card mac-nc-square mac-nc-calendar-card quick-toggle',
             can_focus: true,
             reactive: true,
             x_expand: false,
@@ -1565,7 +1580,7 @@ class MacOSNotificationCenter {
     _buildRemindersCard() {
         const card = new St.BoxLayout({
             orientation: Clutter.Orientation.VERTICAL,
-            style_class: 'mac-nc-card mac-nc-square mac-nc-reminders-card',
+            style_class: 'mac-nc-card mac-nc-square mac-nc-reminders-card quick-toggle',
             reactive: true,
             x_expand: false,
         });
@@ -1623,7 +1638,7 @@ class MacOSNotificationCenter {
     _buildSystemActivityCard() {
         const card = new St.BoxLayout({
             orientation: Clutter.Orientation.VERTICAL,
-            style_class: 'mac-nc-card mac-nc-wide mac-nc-stocks-card',
+            style_class: 'mac-nc-card mac-nc-wide mac-nc-stocks-card quick-toggle',
             reactive: true,
             x_expand: true,
         });
@@ -1874,7 +1889,7 @@ class MacOSNotificationCenter {
     _buildWeatherCard() {
         const card = new St.BoxLayout({
             orientation: Clutter.Orientation.VERTICAL,
-            style_class: 'mac-nc-card mac-nc-wide mac-nc-weather-card',
+            style_class: 'mac-nc-card mac-nc-wide mac-nc-weather-card quick-toggle',
             reactive: true,
             x_expand: true,
         });
@@ -2133,7 +2148,7 @@ class MacOSNotificationCenter {
     _buildMusicCard() {
         const card = new St.BoxLayout({
             orientation: Clutter.Orientation.VERTICAL,
-            style_class: 'mac-nc-card mac-nc-square mac-nc-podcasts-card',
+            style_class: 'mac-nc-card mac-nc-square mac-nc-podcasts-card quick-toggle',
             reactive: true,
             x_expand: false,
         });
@@ -2581,7 +2596,7 @@ class MacOSNotificationCenter {
     _buildBatteryCard() {
         const card = new St.BoxLayout({
             orientation: Clutter.Orientation.VERTICAL,
-            style_class: 'mac-nc-card mac-nc-square mac-nc-battery-card',
+            style_class: 'mac-nc-card mac-nc-square mac-nc-battery-card quick-toggle',
             reactive: true,
             x_expand: false,
         });
@@ -2611,7 +2626,7 @@ class MacOSNotificationCenter {
     _buildWorldClockCard() {
         const card = new St.BoxLayout({
             orientation: Clutter.Orientation.VERTICAL,
-            style_class: 'mac-nc-card mac-nc-wide mac-nc-worldclock-card',
+            style_class: 'mac-nc-card mac-nc-wide mac-nc-worldclock-card quick-toggle',
             reactive: true,
             x_expand: true,
         });

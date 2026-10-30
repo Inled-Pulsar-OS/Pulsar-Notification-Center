@@ -122,16 +122,16 @@
 }
 
 .mac-nc-row > .mac-nc-square {
-    width: 169px;
-    min-width: 169px;
-    max-width: 169px;
+    width: 145px !important;
+    min-width: 145px !important;
+    max-width: 145px !important;
 }
 
 .mac-nc-row > .mac-nc-square-open,
 .mac-nc-square-open {
-    width: 350px !important;
-    min-width: 350px !important;
-    max-width: 350px !important;
+    width: 326px !important;
+    min-width: 326px !important;
+    max-width: 326px !important;
 }
 
 /* 3. Base Floating Glass Cards
@@ -155,16 +155,16 @@
  */
 .mac-nc-card {
     border-radius: 32.5px;
-    padding: 12px;
-    background-color: rgba(255, 255, 255, 0.15) !important;
-    border: 1px solid rgba(255, 255, 255, 0.24) !important;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18) !important;
+    padding: 10px 11px;
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
     color: #ffffff !important;
 }
 
 .mac-nc-card:hover {
-    background-color: rgba(255, 255, 255, 0.22) !important;
-    border-color: rgba(255, 255, 255, 0.32) !important;
+    background-color: rgba(255, 255, 255, 0.22);
+    border-color: rgba(255, 255, 255, 0.32);
 }
 
 .mac-nc-card-inner {
@@ -172,18 +172,24 @@
 }
 
 .mac-nc-square {
-    width: 169px;
-    min-width: 169px;
-    max-width: 169px;
-    height: 154px;
-    min-height: 154px;
-    max-height: 154px;
+    width: 145px !important;
+    min-width: 145px !important;
+    max-width: 145px !important;
+    height: 168px;
+    min-height: 168px;
+    max-height: 168px;
 }
 
 .mac-nc-wide {
-    width: 350px;
-    min-width: 350px;
-    max-width: 350px;
+    width: 326px !important;
+    min-width: 326px !important;
+    max-width: 326px !important;
+}
+
+/* Defence against shell themes that target quick-toggle children */
+.mac-nc-card.quick-toggle > StBoxLayout,
+.mac-nc-sidebar .quick-toggle > StBoxLayout {
+    padding-left: 0px !important;
 }
 
 /* While one of those pods is showing a panel it must be free to grow: St's
@@ -192,32 +198,25 @@
  * stay wide enough for the row; with its row-mate hidden the card expands to
  * the whole row anyway. */
 .mac-nc-square-open {
-    width: 350px;
+    width: 326px !important;
 }
 
-/* 4. Notifications
- *
- * Notification cards are NOT Liquid Glass pods: their height changes with the
- * text, and a glass pod would turn into a pill (the glass corner radius is
- * fixed at 32.5). They therefore keep their own darker base — the drawer has no
- * panel behind it, so without the blur of a pod they would be unreadable on a
- * bright wallpaper — with a radius from the same scale as the cards.
- */
+/* 4. Notifications */
 .mac-nc-notif-card {
     padding: 10px 14px;
     border-radius: 32.5px;
-    background-color: rgba(255, 255, 255, 0.15) !important;
-    border: 1px solid rgba(255, 255, 255, 0.24) !important;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18) !important;
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
     color: #ffffff !important;
-    width: 350px;
-    min-width: 350px;
-    max-width: 350px;
+    width: 320px !important;
+    min-width: 320px !important;
+    max-width: 320px !important;
 }
 
 .mac-nc-notif-card:hover {
-    background-color: rgba(255, 255, 255, 0.22) !important;
-    border-color: rgba(255, 255, 255, 0.32) !important;
+    background-color: rgba(255, 255, 255, 0.22);
+    border-color: rgba(255, 255, 255, 0.32);
 }
 
 .mac-nc-notif-top {
@@ -283,13 +282,13 @@
     padding: 12px 16px;
     spacing: 10px;
     border-radius: 32.5px;
-    background-color: rgba(255, 255, 255, 0.15) !important;
-    border: 1px solid rgba(255, 255, 255, 0.24) !important;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18) !important;
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
     color: #ffffff !important;
-    width: 350px;
-    min-width: 350px;
-    max-width: 350px;
+    width: 316px !important;
+    min-width: 316px !important;
+    max-width: 316px !important;
 }
 
 .mac-nc-empty-icon {
@@ -309,15 +308,16 @@
 .mac-nc-more-notifs-btn {
     padding: 10px 14px;
     border-radius: 32.5px;
-    background-color: rgba(255, 255, 255, 0.15) !important;
-    border: 1px solid rgba(255, 255, 255, 0.24) !important;
-    width: 350px;
-    min-width: 350px;
-    max-width: 350px;
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+    width: 320px !important;
+    min-width: 320px !important;
+    max-width: 320px !important;
 }
 .mac-nc-more-notifs-btn:hover {
-    background-color: rgba(255, 255, 255, 0.22) !important;
-    border-color: rgba(255, 255, 255, 0.32) !important;
+    background-color: rgba(255, 255, 255, 0.22);
+    border-color: rgba(255, 255, 255, 0.32);
 }
 .mac-nc-more-label {
     font-size: 11px;
@@ -609,9 +609,9 @@
 }
 
 .mac-nc-music-art {
-    width: 84px;
-    height: 84px;
-    border-radius: 21px;
+    width: 76px;
+    height: 76px;
+    border-radius: 20px;
     background-color: rgba(255, 255, 255, 0.12);
     background-size: cover;
     /* A dark cover would otherwise vanish on the glass: the hairline keeps
