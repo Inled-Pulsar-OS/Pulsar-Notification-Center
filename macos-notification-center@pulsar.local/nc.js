@@ -481,7 +481,6 @@ class MacOSNotificationCenter {
                     this._applyResponsiveScale();
                     if (this._dateMenu?.menu?._boxPointer?._border) {
                         this._dateMenu.menu._boxPointer._border.visible = false;
-                        this._dateMenu.menu._boxPointer._border.opacity = 0;
                     }
                     this._queryTodayEvents();
                     this._refresh();
@@ -621,7 +620,6 @@ class MacOSNotificationCenter {
                 menu._boxPointer.remove_style_class_name('panel-menu');
                 if (menu._boxPointer._border) {
                     menu._boxPointer._border.visible = false;
-                    menu._boxPointer._border.opacity = 0;
                 }
             } else {
                 menu._boxPointer.add_style_class_name('popup-menu-boxpointer');
