@@ -70,16 +70,20 @@
 
 .mac-nc-content {
     spacing: 12px;
-    width: 350px;
-    min-width: 350px;
-    max-width: 350px;
+    width: 370px;
+    min-width: 370px;
+    max-width: 370px;
 }
 
 .mac-nc-section {
     spacing: 8px;
-    width: 350px;
-    min-width: 350px;
-    max-width: 350px;
+    width: 370px;
+    min-width: 370px;
+    max-width: 370px;
+}
+
+.mac-nc-notif-list {
+    spacing: 4px;
 }
 
 .mac-nc-section-header,
@@ -205,18 +209,18 @@
 .mac-nc-notif-card {
     padding: 10px 14px;
     border-radius: 32.5px;
-    background-color: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.24);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    width: 370px;
+    max-width: 370px;
     color: #ffffff !important;
-    width: 320px !important;
-    min-width: 320px !important;
-    max-width: 320px !important;
 }
 
 .mac-nc-notif-card:hover {
-    background-color: rgba(255, 255, 255, 0.22);
-    border-color: rgba(255, 255, 255, 0.32);
+    background-color: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
 }
 
 .mac-nc-notif-top {
@@ -279,16 +283,21 @@
 }
 
 .mac-nc-empty-card {
-    padding: 12px 16px;
+    padding: 10px 16px;
     spacing: 10px;
     border-radius: 32.5px;
-    background-color: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.24);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    width: 370px;
+    max-width: 370px;
+    min-height: 48px;
     color: #ffffff !important;
-    width: 316px !important;
-    min-width: 316px !important;
-    max-width: 316px !important;
+}
+
+.mac-nc-empty-card:hover {
+    background-color: transparent !important;
+    box-shadow: none !important;
 }
 
 .mac-nc-empty-icon {
@@ -308,16 +317,15 @@
 .mac-nc-more-notifs-btn {
     padding: 10px 14px;
     border-radius: 32.5px;
-    background-color: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.24);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
-    width: 320px !important;
-    min-width: 320px !important;
-    max-width: 320px !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    width: 370px;
+    max-width: 370px;
 }
 .mac-nc-more-notifs-btn:hover {
-    background-color: rgba(255, 255, 255, 0.22);
-    border-color: rgba(255, 255, 255, 0.32);
+    background-color: transparent !important;
+    box-shadow: none !important;
 }
 .mac-nc-more-label {
     font-size: 11px;
