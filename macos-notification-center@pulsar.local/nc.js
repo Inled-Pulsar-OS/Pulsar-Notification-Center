@@ -2100,6 +2100,24 @@ class MacOSNotificationCenter {
             style_class: 'mac-nc-weather-forecast-row',
             x_expand: true,
         });
+        const initialOffsets = [0, 2, 4, 6, 8];
+        for (const offset of initialOffsets) {
+            const pill = new St.BoxLayout({
+                orientation: Clutter.Orientation.VERTICAL,
+                style_class: 'mac-nc-forecast-pill',
+                x_expand: true,
+            });
+            pill.add_child(new St.Label({
+                text: offset === 0 ? t('NOW') : `+${offset}h`,
+                style_class: 'mac-nc-forecast-time',
+            }));
+            pill.add_child(icon('weather-clear-symbolic', 'mac-nc-forecast-icon', 14));
+            pill.add_child(new St.Label({
+                text: '--°',
+                style_class: 'mac-nc-forecast-temp',
+            }));
+            this._forecastRow.add_child(pill);
+        }
         card.add_child(this._forecastRow);
         return card;
     }
@@ -2311,6 +2329,8 @@ class MacOSNotificationCenter {
                 }));
                 this._forecastRow.add_child(pill);
             }
+            try { this._weatherCard?.queue_relayout(); } catch (e) {}
+            try { this._scroll?.queue_relayout(); } catch (e) {}
         }
     }
 

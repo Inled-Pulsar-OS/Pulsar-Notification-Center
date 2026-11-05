@@ -498,6 +498,8 @@
 
 /* 9. Weather Card */
 .mac-nc-weather-card {
+    min-height: 114px;
+    height: 114px;
     padding: 10px 14px;
 }
 
@@ -530,6 +532,7 @@
 .mac-nc-weather-forecast-row {
     spacing: 6px;
     margin-top: 8px;
+    min-height: 48px;
 }
 
 .mac-nc-forecast-pill {
