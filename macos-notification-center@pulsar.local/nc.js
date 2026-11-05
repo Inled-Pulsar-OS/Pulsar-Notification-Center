@@ -1639,7 +1639,7 @@ class MacOSNotificationCenter {
             style_class: 'mac-nc-card mac-nc-square mac-nc-calendar-card quick-toggle',
             can_focus: true,
             reactive: true,
-            x_expand: false,
+            x_expand: true,
         });
 
         const box = new St.BoxLayout({
@@ -1802,7 +1802,7 @@ class MacOSNotificationCenter {
             orientation: Clutter.Orientation.VERTICAL,
             style_class: 'mac-nc-card mac-nc-square mac-nc-reminders-card quick-toggle',
             reactive: true,
-            x_expand: false,
+            x_expand: true,
         });
 
         const header = new St.BoxLayout({
@@ -2046,61 +2046,20 @@ class MacOSNotificationCenter {
         this._batteryList.destroy_all_children();
 
         if (devices.length === 0) {
-            const row = new St.BoxLayout({
-                orientation: Clutter.Orientation.HORIZONTAL,
-                style_class: 'mac-nc-battery-row',
-                x_expand: true,
-                y_align: Clutter.ActorAlign.CENTER,
-            });
+            const row = new St.BoxLayout({orientation: Clutter.Orientation.HORIZONTAL, style_class: 'mac-nc-battery-row', x_expand: true});
             row.add_child(icon('ac-adapter-symbolic', 'mac-nc-device-icon', 14));
-            const devLabel = new St.Label({
-                text: 'Alimentación CA',
-                style_class: 'mac-nc-device-name',
-                x_expand: true,
-                y_align: Clutter.ActorAlign.CENTER,
-            });
-            devLabel.clutter_text.ellipsize = Pango.EllipsizeMode.END;
-            devLabel.clutter_text.line_wrap = false;
-            devLabel.set_style('max-width: 65px;');
-            row.add_child(devLabel);
-            const levelLabel = new St.Label({
-                text: '100%',
-                style_class: 'mac-nc-device-level',
-                x_align: Clutter.ActorAlign.END,
-                y_align: Clutter.ActorAlign.CENTER,
-            });
-            levelLabel.set_style('min-width: 38px; text-align: right;');
-            row.add_child(levelLabel);
+            row.add_child(new St.Label({text: 'Alimentación CA', style_class: 'mac-nc-device-name', x_expand: true}));
+            row.add_child(new St.Label({text: '100%', style_class: 'mac-nc-device-level'}));
             this._batteryList.add_child(row);
             return;
         }
 
         for (const dev of devices) {
-            const row = new St.BoxLayout({
-                orientation: Clutter.Orientation.HORIZONTAL,
-                style_class: 'mac-nc-battery-row',
-                x_expand: true,
-                y_align: Clutter.ActorAlign.CENTER,
-            });
+            const row = new St.BoxLayout({orientation: Clutter.Orientation.HORIZONTAL, style_class: 'mac-nc-battery-row', x_expand: true});
             row.add_child(icon(dev.iconName, 'mac-nc-device-icon', 14));
-            const devLabel = new St.Label({
-                text: dev.name,
-                style_class: 'mac-nc-device-name',
-                x_expand: true,
-                y_align: Clutter.ActorAlign.CENTER,
-            });
-            devLabel.clutter_text.ellipsize = Pango.EllipsizeMode.END;
-            devLabel.clutter_text.line_wrap = false;
-            devLabel.set_style('max-width: 65px;');
+            const devLabel = new St.Label({text: dev.name, style_class: 'mac-nc-device-name', x_expand: true});
             row.add_child(devLabel);
-            const levelLabel = new St.Label({
-                text: `${dev.percentage}%`,
-                style_class: 'mac-nc-device-level',
-                x_align: Clutter.ActorAlign.END,
-                y_align: Clutter.ActorAlign.CENTER,
-            });
-            levelLabel.set_style('min-width: 38px; text-align: right;');
-            row.add_child(levelLabel);
+            row.add_child(new St.Label({text: `${dev.percentage}%`, style_class: 'mac-nc-device-level'}));
             this._batteryList.add_child(row);
         }
     }
@@ -2370,7 +2329,7 @@ class MacOSNotificationCenter {
             orientation: Clutter.Orientation.VERTICAL,
             style_class: 'mac-nc-card mac-nc-square mac-nc-podcasts-card quick-toggle',
             reactive: true,
-            x_expand: false,
+            x_expand: true,
         });
 
         const header = new St.BoxLayout({
@@ -2818,7 +2777,7 @@ class MacOSNotificationCenter {
             orientation: Clutter.Orientation.VERTICAL,
             style_class: 'mac-nc-card mac-nc-square mac-nc-battery-card quick-toggle',
             reactive: true,
-            x_expand: false,
+            x_expand: true,
         });
 
         const header = new St.BoxLayout({
