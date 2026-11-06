@@ -503,6 +503,11 @@
     padding: 10px 14px;
 }
 
+.mac-nc-weather-card-open {
+    padding: 10px 14px;
+    min-height: 114px;
+}
+
 .mac-nc-weather-city {
     font-size: 14px;
     font-weight: 700;

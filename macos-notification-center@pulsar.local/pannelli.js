@@ -183,19 +183,33 @@ export function crea(nc, h) {
      * four square pods carry the class, the wide ones exit immediately. */
     function libera(c) {
         try {
-            if (!c.has_style_class_name('mac-nc-square'))
+            if (!c)
                 return;
-            c.remove_style_class_name('mac-nc-square');
-            c.add_style_class_name('mac-nc-square-open');
+            try { c.set_height(-1); } catch (e) {}
+            if (c.has_style_class_name('mac-nc-square')) {
+                c.remove_style_class_name('mac-nc-square');
+                c.add_style_class_name('mac-nc-square-open');
+            }
+            if (c.has_style_class_name('mac-nc-weather-card')) {
+                c.remove_style_class_name('mac-nc-weather-card');
+                c.add_style_class_name('mac-nc-weather-card-open');
+            }
         } catch (e) {}
     }
 
     function vincola(c) {
         try {
-            if (!c || !c.has_style_class_name('mac-nc-square-open'))
+            if (!c)
                 return;
-            c.remove_style_class_name('mac-nc-square-open');
-            c.add_style_class_name('mac-nc-square');
+            try { c.set_height(-1); } catch (e) {}
+            if (c.has_style_class_name('mac-nc-square-open')) {
+                c.remove_style_class_name('mac-nc-square-open');
+                c.add_style_class_name('mac-nc-square');
+            }
+            if (c.has_style_class_name('mac-nc-weather-card-open')) {
+                c.remove_style_class_name('mac-nc-weather-card-open');
+                c.add_style_class_name('mac-nc-weather-card');
+            }
         } catch (e) {}
     }
 
