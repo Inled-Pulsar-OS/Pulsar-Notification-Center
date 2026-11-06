@@ -457,6 +457,13 @@
 
 /* 8. System Activity Card */
 .mac-nc-stocks-card {
+    min-height: 84px;
+    height: 84px;
+    padding: 10px 14px;
+}
+
+.mac-nc-stocks-card-open {
+    min-height: 84px;
     padding: 10px 14px;
 }
 
@@ -724,6 +731,13 @@
 
 /* 12. World Clock */
 .mac-nc-worldclock-card {
+    min-height: 66px;
+    height: 66px;
+    padding: 10px 14px;
+}
+
+.mac-nc-worldclock-card-open {
+    min-height: 66px;
     padding: 10px 14px;
 }
 

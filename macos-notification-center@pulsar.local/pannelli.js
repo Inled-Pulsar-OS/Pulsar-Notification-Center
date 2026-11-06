@@ -194,6 +194,14 @@ export function crea(nc, h) {
                 c.remove_style_class_name('mac-nc-weather-card');
                 c.add_style_class_name('mac-nc-weather-card-open');
             }
+            if (c.has_style_class_name('mac-nc-stocks-card')) {
+                c.remove_style_class_name('mac-nc-stocks-card');
+                c.add_style_class_name('mac-nc-stocks-card-open');
+            }
+            if (c.has_style_class_name('mac-nc-worldclock-card')) {
+                c.remove_style_class_name('mac-nc-worldclock-card');
+                c.add_style_class_name('mac-nc-worldclock-card-open');
+            }
         } catch (e) {}
     }
 
@@ -209,6 +217,14 @@ export function crea(nc, h) {
             if (c.has_style_class_name('mac-nc-weather-card-open')) {
                 c.remove_style_class_name('mac-nc-weather-card-open');
                 c.add_style_class_name('mac-nc-weather-card');
+            }
+            if (c.has_style_class_name('mac-nc-stocks-card-open')) {
+                c.remove_style_class_name('mac-nc-stocks-card-open');
+                c.add_style_class_name('mac-nc-stocks-card');
+            }
+            if (c.has_style_class_name('mac-nc-worldclock-card-open')) {
+                c.remove_style_class_name('mac-nc-worldclock-card-open');
+                c.add_style_class_name('mac-nc-worldclock-card');
             }
         } catch (e) {}
     }
