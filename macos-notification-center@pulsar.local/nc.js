@@ -793,22 +793,6 @@ class MacOSNotificationCenter {
                     card.remove_style_class_name('quick-toggle');
             } catch (e) {}
         }
-        try {
-            if (this._notifList) {
-                for (const child of this._notifList.get_children()) {
-                    if (!child) continue;
-                    if (child.has_style_class_name('mac-nc-notif-card') ||
-                        child.has_style_class_name('mac-nc-empty-card') ||
-                        child.has_style_class_name('mac-nc-more-notifs-btn')) {
-                        if (active)
-                            child.add_style_class_name('quick-toggle');
-                        else
-                            child.remove_style_class_name('quick-toggle');
-                        try { child.set_style('background-color: transparent !important;'); } catch (e) {}
-                    }
-                }
-            }
-        } catch (e) {}
     }
 
     /* See DEBUG_FLAG at the top of the file. */
@@ -1444,12 +1428,10 @@ class MacOSNotificationCenter {
             this._expandBtn.visible = false;
             const emptyCard = new St.BoxLayout({
                 orientation: Clutter.Orientation.HORIZONTAL,
-                style_class: 'mac-nc-card mac-nc-empty-card quick-toggle',
+                style_class: 'mac-nc-empty-card',
                 x_expand: true,
                 x_align: Clutter.ActorAlign.CENTER,
             });
-            if (this._isLiquidGlassActive())
-                emptyCard.add_style_class_name('quick-toggle');
             emptyCard.add_child(icon('nc:messages', 'mac-nc-empty-icon', 16));
             emptyCard.add_child(new St.Label({
                 text: t('NO_NOTIFICATIONS'),
@@ -1471,13 +1453,11 @@ class MacOSNotificationCenter {
         if (!this._notifsExpanded && total > 3) {
             const remaining = total - 3;
             const moreBtn = new St.Button({
-                style_class: 'mac-nc-card mac-nc-more-notifs-btn quick-toggle',
+                style_class: 'mac-nc-more-notifs-btn',
                 can_focus: true,
                 reactive: true,
                 x_expand: true,
             });
-            if (this._isLiquidGlassActive())
-                moreBtn.add_style_class_name('quick-toggle');
             const moreBox = new St.BoxLayout({
                 orientation: Clutter.Orientation.HORIZONTAL,
                 x_align: Clutter.ActorAlign.CENTER,
@@ -1498,23 +1478,24 @@ class MacOSNotificationCenter {
 
     _buildNotificationCard(notification) {
         const card = new St.Button({
-            style_class: 'mac-nc-card mac-nc-notif-card quick-toggle',
+            style_class: 'mac-nc-notif-card',
             can_focus: true,
             reactive: true,
             x_expand: true,
         });
-        if (this._isLiquidGlassActive())
-            card.add_style_class_name('quick-toggle');
 
         const box = new St.BoxLayout({
             orientation: Clutter.Orientation.VERTICAL,
+            style_class: 'mac-nc-notif-box',
             x_expand: true,
+            y_expand: false,
         });
 
         const topRow = new St.BoxLayout({
             orientation: Clutter.Orientation.HORIZONTAL,
             style_class: 'mac-nc-notif-top',
             x_expand: true,
+            y_align: Clutter.ActorAlign.CENTER,
         });
 
         let gicon = notification.gicon || notification.icon;
@@ -1534,6 +1515,7 @@ class MacOSNotificationCenter {
             text: appTitle,
             style_class: 'mac-nc-notif-app',
             x_expand: true,
+            y_align: Clutter.ActorAlign.CENTER,
         });
         topRow.add_child(appLabel);
 
@@ -1556,6 +1538,7 @@ class MacOSNotificationCenter {
         const timeLabel = new St.Label({
             text: timeStr,
             style_class: 'mac-nc-notif-time',
+            y_align: Clutter.ActorAlign.CENTER,
         });
         topRow.add_child(timeLabel);
 
@@ -1563,6 +1546,7 @@ class MacOSNotificationCenter {
             style_class: 'mac-nc-notif-close',
             can_focus: true,
             reactive: true,
+            y_align: Clutter.ActorAlign.CENTER,
         });
         closeBtn.set_child(icon('window-close-symbolic', 'mac-nc-mini-icon', 10));
         closeBtn.connect('clicked', () => {
@@ -1575,24 +1559,28 @@ class MacOSNotificationCenter {
         topRow.add_child(closeBtn);
         box.add_child(topRow);
 
-        const titleText = notification.title || notification.summary || '';
+        const titleText = (notification.title || notification.summary || '').trim();
         if (titleText) {
             const title = new St.Label({
                 text: titleText,
                 style_class: 'mac-nc-notif-title',
+                x_expand: true,
             });
             title.clutter_text.ellipsize = Pango.EllipsizeMode.END;
+            title.clutter_text.line_wrap = false;
             box.add_child(title);
         }
 
-        const bodyText = notification.bannerBodyText || notification.body || '';
+        let bodyText = (notification.bannerBodyText || notification.body || '').trim();
         if (bodyText) {
+            bodyText = bodyText.replace(/\n+/g, ' ');
             const body = new St.Label({
                 text: bodyText,
                 style_class: 'mac-nc-notif-body',
+                x_expand: true,
             });
-            body.clutter_text.line_wrap = true;
             body.clutter_text.ellipsize = Pango.EllipsizeMode.END;
+            body.clutter_text.line_wrap = false;
             box.add_child(body);
         }
 
@@ -2401,7 +2389,7 @@ class MacOSNotificationCenter {
             orientation: Clutter.Orientation.VERTICAL,
             style_class: 'mac-nc-music-area',
             x_expand: true,
-            y_expand: true,
+            y_expand: false,
             y_align: Clutter.ActorAlign.START,
         });
         area.add_child(this._musicArt);
@@ -2414,7 +2402,7 @@ class MacOSNotificationCenter {
             orientation: Clutter.Orientation.HORIZONTAL,
             style_class: 'mac-nc-music-controls',
             x_expand: true,
-            y_expand: true,
+            y_expand: false,
             y_align: Clutter.ActorAlign.END,
         });
         const spazio = () => new St.Widget({x_expand: true});
@@ -2815,7 +2803,8 @@ class MacOSNotificationCenter {
             orientation: Clutter.Orientation.VERTICAL,
             style_class: 'mac-nc-battery-list',
             x_expand: true,
-            y_expand: true,
+            y_expand: false,
+            y_align: Clutter.ActorAlign.START,
         });
         card.add_child(this._batteryList);
         return card;

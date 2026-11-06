@@ -37,10 +37,10 @@
 
 /* 2. Main Root Container */
 .mac-nc-sidebar {
-    padding: 8px 6px 8px 10px;
-    width: 374px;
-    min-width: 374px;
-    max-width: 374px;
+    padding: 10px;
+    width: 370px;
+    min-width: 370px;
+    max-width: 370px;
     background-color: transparent !important;
     background: transparent !important;
     border: none !important;
@@ -49,41 +49,56 @@
 
 .mac-nc-scroll {
     max-height: 900px;
-    padding-right: 8px;
+    padding-right: 0px;
 }
 
 .mac-nc-scroll StScrollBar {
     padding: 0px;
+    margin: 0px;
+    width: 4px;
+    min-width: 4px;
+    max-width: 4px;
+}
+
+.mac-nc-scroll StScrollBar StBin#trough {
+    background-color: transparent !important;
+    border: none !important;
 }
 
 .mac-nc-scroll StScrollBar StButton#vhandle {
-    background-color: rgba(255, 255, 255, 0.28);
-    border-radius: 3px;
-    width: 4px;
-    margin: 0px;
+    background-color: rgba(255, 255, 255, 0.28) !important;
+    border-radius: 4px !important;
+    border: none !important;
+    width: 4px !important;
+    min-width: 4px !important;
+    max-width: 4px !important;
+    margin: 0px !important;
 }
 
 .mac-nc-scroll StScrollBar StButton#vhandle:hover,
 .mac-nc-scroll StScrollBar StButton#vhandle:active {
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.6) !important;
 }
 
 .mac-nc-content {
     spacing: 12px;
-    width: 370px;
-    min-width: 370px;
-    max-width: 370px;
+    width: 350px;
+    min-width: 350px;
+    max-width: 350px;
 }
 
 .mac-nc-section {
     spacing: 8px;
-    width: 370px;
-    min-width: 370px;
-    max-width: 370px;
+    width: 350px;
+    min-width: 350px;
+    max-width: 350px;
 }
 
 .mac-nc-notif-list {
-    spacing: 4px;
+    spacing: 8px;
+    width: 350px;
+    min-width: 350px;
+    max-width: 350px;
 }
 
 .mac-nc-section-header,
@@ -159,12 +174,9 @@
 }
 
 .mac-nc-square {
-    /* Width: measured, not guessed. The two widgets in a row used to size
-     * themselves on their own content (the calendar came out 192px wide, the
-     * tasks widget 162px), so the row looked ragged. Both cards expand, so
-     * giving them the same preferred width splits the row evenly:
-     * (366 - 12 gap) / 2 = 177. */
-    width: 177px;
+    width: 169px;
+    min-width: 169px;
+    max-width: 169px;
     height: 168px;
     min-height: 168px;
     max-height: 168px;
@@ -192,23 +204,29 @@
 /* 4. Notifications */
 .mac-nc-notif-card {
     padding: 10px 14px;
-    border-radius: 32.5px;
-    background-color: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    width: 370px;
-    max-width: 370px;
+    border-radius: 18px;
+    background-color: rgba(255, 255, 255, 0.12) !important;
+    border: 1px solid rgba(255, 255, 255, 0.20) !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18) !important;
+    width: 350px;
+    min-width: 350px;
+    max-width: 350px;
     color: #ffffff !important;
 }
 
 .mac-nc-notif-card:hover {
-    background-color: transparent !important;
-    border-color: transparent !important;
-    box-shadow: none !important;
+    background-color: rgba(255, 255, 255, 0.18) !important;
+    border-color: rgba(255, 255, 255, 0.28) !important;
+}
+
+.mac-nc-notif-box {
+    spacing: 3px;
+    width: 322px;
 }
 
 .mac-nc-notif-top {
     spacing: 8px;
+    margin-bottom: 2px;
 }
 
 .mac-nc-notif-icon {
@@ -255,33 +273,33 @@
 .mac-nc-notif-title {
     font-size: 12px;
     font-weight: 700;
-    margin-top: 2px;
+    margin-top: 1px;
     color: #ffffff;
 }
 
 .mac-nc-notif-body {
     font-size: 11px;
-    opacity: 0.85;
-    margin-top: 2px;
+    opacity: 0.82;
+    margin-top: 1px;
     color: #ffffff;
 }
 
 .mac-nc-empty-card {
-    padding: 10px 16px;
+    padding: 12px 16px;
     spacing: 10px;
-    border-radius: 32.5px;
-    background-color: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    width: 370px;
-    max-width: 370px;
+    border-radius: 18px;
+    background-color: rgba(255, 255, 255, 0.12) !important;
+    border: 1px solid rgba(255, 255, 255, 0.20) !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18) !important;
+    width: 350px;
+    min-width: 350px;
+    max-width: 350px;
     min-height: 48px;
     color: #ffffff !important;
 }
 
 .mac-nc-empty-card:hover {
-    background-color: transparent !important;
-    box-shadow: none !important;
+    background-color: rgba(255, 255, 255, 0.16) !important;
 }
 
 .mac-nc-empty-icon {
@@ -299,17 +317,18 @@
 }
 
 .mac-nc-more-notifs-btn {
-    padding: 10px 14px;
-    border-radius: 32.5px;
-    background-color: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    width: 370px;
-    max-width: 370px;
+    padding: 9px 14px;
+    border-radius: 18px;
+    background-color: rgba(255, 255, 255, 0.12) !important;
+    border: 1px solid rgba(255, 255, 255, 0.20) !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18) !important;
+    width: 350px;
+    min-width: 350px;
+    max-width: 350px;
 }
 .mac-nc-more-notifs-btn:hover {
-    background-color: transparent !important;
-    box-shadow: none !important;
+    background-color: rgba(255, 255, 255, 0.18) !important;
+    border-color: rgba(255, 255, 255, 0.28) !important;
 }
 .mac-nc-more-label {
     font-size: 11px;
