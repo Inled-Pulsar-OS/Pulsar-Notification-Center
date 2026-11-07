@@ -793,6 +793,18 @@ class MacOSNotificationCenter {
                     card.remove_style_class_name('quick-toggle');
             } catch (e) {}
         }
+
+        if (this._notifList) {
+            for (const child of this._notifList.get_children()) {
+                if (!child) continue;
+                try {
+                    if (active)
+                        child.add_style_class_name('quick-toggle');
+                    else
+                        child.remove_style_class_name('quick-toggle');
+                } catch (e) {}
+            }
+        }
     }
 
     /* See DEBUG_FLAG at the top of the file. */
@@ -1428,15 +1440,20 @@ class MacOSNotificationCenter {
             this._expandBtn.visible = false;
             const emptyCard = new St.BoxLayout({
                 orientation: Clutter.Orientation.HORIZONTAL,
-                style_class: 'mac-nc-empty-card',
+                style_class: this._isLiquidGlassActive() ? 'mac-nc-empty-card quick-toggle' : 'mac-nc-empty-card',
                 x_expand: true,
                 x_align: Clutter.ActorAlign.CENTER,
+                y_align: Clutter.ActorAlign.CENTER,
             });
-            emptyCard.add_child(icon('nc:messages', 'mac-nc-empty-icon', 16));
-            emptyCard.add_child(new St.Label({
+            const msgIcon = icon('nc:messages', 'mac-nc-empty-icon', 16);
+            msgIcon.y_align = Clutter.ActorAlign.CENTER;
+            emptyCard.add_child(msgIcon);
+            const emptyLabel = new St.Label({
                 text: t('NO_NOTIFICATIONS'),
                 style_class: 'mac-nc-empty-notif',
-            }));
+                y_align: Clutter.ActorAlign.CENTER,
+            });
+            emptyCard.add_child(emptyLabel);
             this._notifList.add_child(emptyCard);
             return;
         }
@@ -1453,7 +1470,7 @@ class MacOSNotificationCenter {
         if (!this._notifsExpanded && total > 3) {
             const remaining = total - 3;
             const moreBtn = new St.Button({
-                style_class: 'mac-nc-more-notifs-btn',
+                style_class: this._isLiquidGlassActive() ? 'mac-nc-more-notifs-btn quick-toggle' : 'mac-nc-more-notifs-btn',
                 can_focus: true,
                 reactive: true,
                 x_expand: true,
@@ -1478,7 +1495,7 @@ class MacOSNotificationCenter {
 
     _buildNotificationCard(notification) {
         const card = new St.Button({
-            style_class: 'mac-nc-notif-card',
+            style_class: this._isLiquidGlassActive() ? 'mac-nc-notif-card quick-toggle' : 'mac-nc-notif-card',
             can_focus: true,
             reactive: true,
             x_expand: true,
@@ -1517,6 +1534,8 @@ class MacOSNotificationCenter {
             x_expand: true,
             y_align: Clutter.ActorAlign.CENTER,
         });
+        appLabel.clutter_text.ellipsize = Pango.EllipsizeMode.END;
+        appLabel.clutter_text.line_wrap = false;
         topRow.add_child(appLabel);
 
         let timeStr = t('NOW');

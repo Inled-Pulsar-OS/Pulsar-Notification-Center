@@ -203,30 +203,40 @@
 
 /* 4. Notifications */
 .mac-nc-notif-card {
-    padding: 10px 14px;
-    border-radius: 18px;
-    background-color: rgba(255, 255, 255, 0.12) !important;
-    border: 1px solid rgba(255, 255, 255, 0.20) !important;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18) !important;
+    padding: 10px 22px;
+    border-radius: 32.5px;
+    background-color: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.20);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
     width: 350px;
     min-width: 350px;
     max-width: 350px;
     color: #ffffff !important;
 }
 
+.mac-nc-notif-card.quick-toggle {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 32.5px !important;
+}
+
 .mac-nc-notif-card:hover {
-    background-color: rgba(255, 255, 255, 0.18) !important;
-    border-color: rgba(255, 255, 255, 0.28) !important;
+    background-color: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.28);
 }
 
 .mac-nc-notif-box {
     spacing: 3px;
-    width: 322px;
+    width: 306px;
+    min-width: 306px;
+    max-width: 306px;
 }
 
 .mac-nc-notif-top {
     spacing: 8px;
     margin-bottom: 2px;
+    width: 306px;
 }
 
 .mac-nc-notif-icon {
@@ -285,21 +295,29 @@
 }
 
 .mac-nc-empty-card {
-    padding: 12px 16px;
+    padding: 12px 22px;
     spacing: 10px;
-    border-radius: 18px;
-    background-color: rgba(255, 255, 255, 0.12) !important;
-    border: 1px solid rgba(255, 255, 255, 0.20) !important;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18) !important;
+    border-radius: 32.5px;
+    background-color: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.20);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
     width: 350px;
     min-width: 350px;
     max-width: 350px;
-    min-height: 48px;
+    min-height: 52px;
+    max-height: 52px;
     color: #ffffff !important;
 }
 
+.mac-nc-empty-card.quick-toggle {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 32.5px !important;
+}
+
 .mac-nc-empty-card:hover {
-    background-color: rgba(255, 255, 255, 0.16) !important;
+    background-color: rgba(255, 255, 255, 0.16);
 }
 
 .mac-nc-empty-icon {
@@ -317,18 +335,28 @@
 }
 
 .mac-nc-more-notifs-btn {
-    padding: 9px 14px;
-    border-radius: 18px;
-    background-color: rgba(255, 255, 255, 0.12) !important;
-    border: 1px solid rgba(255, 255, 255, 0.20) !important;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18) !important;
+    padding: 10px 22px;
+    border-radius: 32.5px;
+    background-color: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.20);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
     width: 350px;
     min-width: 350px;
     max-width: 350px;
+    min-height: 48px;
+    max-height: 48px;
 }
+
+.mac-nc-more-notifs-btn.quick-toggle {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 32.5px !important;
+}
+
 .mac-nc-more-notifs-btn:hover {
-    background-color: rgba(255, 255, 255, 0.18) !important;
-    border-color: rgba(255, 255, 255, 0.28) !important;
+    background-color: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.28);
 }
 .mac-nc-more-label {
     font-size: 11px;
