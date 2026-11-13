@@ -161,7 +161,7 @@
     background-color: rgba(255, 255, 255, 0.08) !important;
     border: 1px solid rgba(255, 255, 255, 0.18) !important;
     box-shadow: none !important;
-    color: #ffffff !important;
+    color: #ffffff;
 }
 
 .mac-nc-card:hover {
@@ -211,7 +211,7 @@
     width: 350px;
     min-width: 350px;
     max-width: 350px;
-    color: #ffffff !important;
+    color: #ffffff;
 }
 
 .mac-nc-notif-card.quick-toggle {
@@ -306,7 +306,7 @@
     max-width: 350px;
     min-height: 52px;
     max-height: 52px;
-    color: #ffffff !important;
+    color: #ffffff;
 }
 
 .mac-nc-empty-card.quick-toggle {
@@ -445,7 +445,7 @@
     font-weight: 600;
     opacity: 0.85;
     margin-top: 2px;
-    color: #ffffff !important;
+    color: #ffffff;
 }
 
 /* 7. Tasks Widget */
@@ -628,14 +628,14 @@
 .mac-nc-podcasts-card {
     background: linear-gradient(135deg, rgba(88, 52, 196, 0.88), rgba(138, 92, 246, 0.88)) !important;
     border: 1px solid rgba(255, 255, 255, 0.25) !important;
-    color: #ffffff !important;
+    color: #ffffff;
     padding: 10px 12px;
 }
 
 .mac-nc-card-title-white {
     font-size: 12px;
     font-weight: 700;
-    color: #ffffff !important;
+    color: #ffffff;
 }
 
 /* The music pod: the cover centred and big, the name under it, and the
@@ -678,14 +678,14 @@
     font-size: 11px;
     font-weight: 700;
     text-align: center;
-    color: #ffffff !important;
+    color: #ffffff;
 }
 
 .mac-nc-music-artist {
     font-size: 9px;
     text-align: center;
     opacity: 0.85;
-    color: #ffffff !important;
+    color: #ffffff;
 }
 
 .mac-nc-music-controls {
@@ -709,12 +709,12 @@
 
 .mac-nc-music-icon {
     icon-size: 15px;
-    color: #ffffff !important;
+    color: #ffffff;
 }
 
 .mac-nc-music-play-icon {
     icon-size: 17px;
-    color: #ffffff !important;
+    color: #ffffff;
 }
 
 /* 11. Battery Card */

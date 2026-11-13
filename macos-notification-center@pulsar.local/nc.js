@@ -493,6 +493,7 @@ class MacOSNotificationCenter {
                         const actors = [menu._boxPointer?.bin, menu._boxPointer, menu.box, menu.actor].filter(Boolean);
                         for (const actor of actors) {
                             try { actor.remove_all_transitions(); } catch (e) {}
+                            try { actor.show(); actor.reactive = true; } catch (e) {}
                             try { actor.set_translation(80, 0); } catch (e) {}
                             try { actor.set_scale(0.98, 0.98); } catch (e) {}
                             try { actor.opacity = 0; } catch (e) {}
@@ -506,6 +507,9 @@ class MacOSNotificationCenter {
                                     mode: Clutter.AnimationMode.EASE_OUT_QUINT,
                                 });
                             } catch (e) {}
+                        }
+                        if (this._root) {
+                            try { this._root.show(); this._root.reactive = true; } catch (e) {}
                         }
                     } catch (e) {}
                     this._queryTodayEvents();
@@ -523,6 +527,11 @@ class MacOSNotificationCenter {
                     } catch (e) {}
                     try {
                         const menu = this._dateMenu.menu;
+                        if (menu.actor) menu.actor.reactive = false;
+                        if (menu.box) menu.box.reactive = false;
+                        if (menu._boxPointer) menu._boxPointer.reactive = false;
+                        if (this._root) this._root.reactive = false;
+
                         const actors = [menu._boxPointer?.bin, menu._boxPointer, menu.box, menu.actor].filter(Boolean);
                         for (const actor of actors) {
                             try { actor.remove_all_transitions(); } catch (e) {}
@@ -535,7 +544,13 @@ class MacOSNotificationCenter {
                                     duration: 320,
                                     mode: Clutter.AnimationMode.EASE_IN_CUBIC,
                                     onComplete: () => {
-                                        try { actor.set_translation(0, 0); actor.set_scale(1, 1); actor.opacity = 255; } catch (e) {}
+                                        try {
+                                            actor.set_translation(0, 0);
+                                            actor.set_scale(1, 1);
+                                            actor.opacity = 0;
+                                            actor.hide();
+                                            actor.reactive = false;
+                                        } catch (e) {}
                                     },
                                 });
                             } catch (e) {}
